@@ -1,0 +1,358 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NoteNest | Student Resource Hub</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="logo-icon">📚</span>
+                <h2>NoteNest</h2>
+            </div>
+
+            <p class="sidebar-label">WORKSPACE</p>
+
+            <nav>
+                <a href="/" class="nav-link active">
+                    🏠 &nbsp; Dashboard
+                </a>
+
+                <a href="#upload-section" class="nav-link">
+                    ⬆️ &nbsp; Upload Notes
+                </a>
+
+                <a href="#notes-section" class="nav-link">
+                    📖 &nbsp; Study Resources
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="sidebar-note">
+                    <span>💜</span>
+                    <p>Your learning journey starts here.</p>
+                </div>
+                <p class="sidebar-footer">Made for students, by students.</p>
+            </div>
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Top Header -->
+            <header class="topbar">
+                <div>
+                    <p class="breadcrumb">Workspace / Dashboard</p>
+                    <h1>Student Resource Hub</h1>
+                </div>
+
+                <div class="profile">
+                    <div class="profile-icon">S</div>
+                    <div>
+                        <strong>Student</strong>
+                        <p>Computer Science & Design</p>
+                    </div>
+                </div>
+            </header>
+
+
+            <!-- Welcome Banner -->
+            <section class="welcome-banner">
+                <div class="welcome-text">
+                    <p class="welcome-label">YOUR LEARNING SPACE</p>
+
+                    <h2>Welcome to NoteNest! 👋</h2>
+
+                    <p>
+                        Find, share, and organize your study materials
+                        in one simple place.
+                    </p>
+
+                    <a href="#upload-section" class="primary-button">
+                        + Upload New Notes
+                    </a>
+                </div>
+
+                <div class="welcome-decoration">📚</div>
+            </section>
+
+
+            <!-- Information Cards -->
+            <section class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon purple">📚</div>
+                    <p>Total Resources</p>
+                    <h2>{{ notes|length }}</h2>
+                    <span>Resources matching your search</span>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon pink">🎓</div>
+                    <p>Department</p>
+                    <h2 class="stat-text">CSD</h2>
+                    <span>Computer Science and Design</span>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon blue">📂</div>
+                    <p>Academic Years</p>
+                    <h2>4</h2>
+                    <span>First year to Fourth year</span>
+                </div>
+
+            </section>
+
+
+            <!-- Upload Section -->
+            <section class="content-card" id="upload-section">
+
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">CONTRIBUTE</p>
+                        <h2>Upload Study Material</h2>
+                        <p class="section-description">
+                            Share your notes with fellow students.
+                        </p>
+                    </div>
+
+                    <span class="heading-icon">☁️</span>
+                </div>
+
+                <form action="/" method="POST"
+                      enctype="multipart/form-data"
+                      class="upload-form">
+
+                    <div class="form-group">
+                        <label for="title">Resource Title</label>
+
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            placeholder="e.g. Python Programming Notes"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+                            <label for="year">Academic Year</label>
+
+                            <select id="year" name="year" required>
+                                <option value="" disabled selected>
+                                    Select year
+                                </option>
+                                <option value="First Year">First Year</option>
+                                <option value="Second Year">Second Year</option>
+                                <option value="Third Year">Third Year</option>
+                                <option value="Fourth Year">Fourth Year</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+
+                            <input
+                                type="text"
+                                id="subject"
+                                name="subject"
+                                placeholder="e.g. Python"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="file">Choose File</label>
+
+                        <input
+                            type="file"
+                            id="file"
+                            name="file"
+                            accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.zip"
+                            required
+                        >
+
+                        <small>
+                            Select the study material you want to upload.
+                        </small>
+                    </div>
+
+                    <button type="submit" class="primary-button">
+                        ⬆ Upload Resource
+                    </button>
+
+                </form>
+
+            </section>
+
+
+            <!-- Study Resources Section -->
+            <section class="content-card" id="notes-section">
+
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">YOUR LIBRARY</p>
+                        <h2>Study Resources</h2>
+                        <p class="section-description">
+                            Browse, search, download, or delete uploaded notes.
+                        </p>
+                    </div>
+
+                    <span class="heading-icon">📖</span>
+                </div>
+
+
+                <!-- Search Form -->
+                <form action="/" method="GET" class="search-form">
+
+                    <div class="search-input-wrapper">
+                        <span>🔍</span>
+
+                        <input
+                            type="search"
+                            name="search"
+                            placeholder="Search by title, subject, or year..."
+                            value="{{ search }}"
+                        >
+                    </div>
+
+                    <button type="submit" class="search-button">
+                        Search
+                    </button>
+
+                    {% if search %}
+                        <a href="/" class="clear-search">Clear</a>
+                    {% endif %}
+
+                </form>
+
+
+                <!-- Resource Cards -->
+                {% if notes %}
+
+                    <div class="notes-grid">
+
+                        {% for note in notes %}
+
+                            <article class="note-card">
+
+                                <div class="note-card-top">
+
+                                    <div class="file-icon">
+                                        📄
+                                    </div>
+
+                                    <span class="year-badge">
+                                        {{ note[2] }}
+                                    </span>
+
+                                </div>
+
+                                <div class="note-details">
+
+                                    <h3>{{ note[1] }}</h3>
+
+                                    <p class="note-subject">
+                                        📘 {{ note[3] }}
+                                    </p>
+
+                                    <p class="file-type">
+                                        File type:
+                                        {% if '.' in note[4] %}
+                                            {{ note[4].rsplit('.', 1)[0].split('_')[-1] and note[4].rsplit('.', 1)[-1].upper() }}
+                                        {% else %}
+                                            FILE
+                                        {% endif %}
+                                    </p>
+
+                                </div>
+
+                                <div class="note-actions">
+
+                                    <a
+                                        href="{{ url_for('download_file', filename=note[4]) }}"
+                                        class="download-button"
+                                    >
+                                        ⬇ Download
+                                    </a>
+
+                                    <form
+                                        action="{{ url_for('delete', id=note[0]) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('Are you sure you want to delete this resource?');"
+                                    >
+                                        <button
+                                            type="submit"
+                                            class="delete-button"
+                                            title="Delete resource"
+                                        >
+                                            🗑
+                                        </button>
+                                    </form>
+
+                                </div>
+
+                            </article>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% else %}
+
+                    <div class="empty-state">
+                        <div class="empty-icon">📂</div>
+
+                        {% if search %}
+                            <h3>No matching resources found</h3>
+                            <p>
+                                Try another search term or clear your search.
+                            </p>
+
+                            <a href="/" class="primary-button">
+                                View All Resources
+                            </a>
+                        {% else %}
+                            <h3>Your resource library is empty</h3>
+                            <p>
+                                Upload your first study material to get started.
+                            </p>
+
+                            <a href="#upload-section" class="primary-button">
+                                Upload First Resource
+                            </a>
+                        {% endif %}
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+
+            <!-- Footer -->
+            <footer class="page-footer">
+                <p>© 2026 NoteNest · Your Notes. Your Nest. 💜</p>
+            </footer>
+
+        </main>
+
+    </div>
+
+</body>
+</html>
