@@ -162,8 +162,6 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 👩‍💻 Author
 
-Made with ❤️ for students, by students.
-
 **Sneha Dagwar** · [GitHub](https://github.com/SnehaDagwar)
 
 ---
