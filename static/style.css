@@ -1,5 +1,4 @@
 
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
@@ -52,14 +51,14 @@ a {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* Main Layout */
+/* MAIN LAYOUT */
 
 .dashboard {
     display: flex;
     min-height: 100vh;
 }
 
-/* Sidebar */
+/* SIDEBAR */
 
 .sidebar {
     width: 250px;
@@ -166,7 +165,7 @@ a {
     color: #aaa5bb;
 }
 
-/* Main Content */
+/* MAIN CONTENT */
 
 .main-content {
     flex: 1;
@@ -176,7 +175,7 @@ a {
     margin: 0 auto;
 }
 
-/* Header */
+/* HEADER */
 
 .topbar {
     display: flex;
@@ -226,7 +225,7 @@ a {
     font-size: 11px;
 }
 
-/* Welcome Banner */
+/* WELCOME BANNER */
 
 .welcome-banner {
     display: flex;
@@ -239,7 +238,12 @@ a {
     border-radius: 22px;
     overflow: hidden;
     position: relative;
-    background: linear-gradient(115deg, #e8e0ff 0%, #f3eaff 55%, #fbe9f4 100%);
+    background: linear-gradient(
+        115deg,
+        #e8e0ff 0%,
+        #f3eaff 55%,
+        #fbe9f4 100%
+    );
 }
 
 .welcome-text {
@@ -277,7 +281,7 @@ a {
     filter: drop-shadow(0 12px 15px rgba(87, 62, 143, 0.12));
 }
 
-/* Buttons */
+/* BUTTONS */
 
 .primary-button {
     border: none;
@@ -300,7 +304,7 @@ a {
     transform: translateY(-1px);
 }
 
-/* Statistics */
+/* STATISTICS */
 
 .stats-grid {
     display: grid;
@@ -362,7 +366,7 @@ a {
     font-size: 10px;
 }
 
-/* General Content Cards */
+/* GENERAL CONTENT CARDS */
 
 .content-card {
     background: var(--surface);
@@ -409,7 +413,7 @@ a {
     font-size: 23px;
 }
 
-/* Upload Form */
+/* UPLOAD FORM */
 
 .upload-form {
     display: flex;
@@ -487,7 +491,7 @@ a {
     margin-top: 2px;
 }
 
-/* Search */
+/* SEARCH */
 
 .search-form {
     display: flex;
@@ -549,7 +553,7 @@ a {
     padding: 8px;
 }
 
-/* Note Cards */
+/* NOTE CARDS */
 
 .notes-grid {
     display: grid;
@@ -672,7 +676,7 @@ a {
     background: #ffe5eb;
 }
 
-/* Empty State */
+/* EMPTY STATE */
 
 .empty-state {
     text-align: center;
@@ -698,7 +702,7 @@ a {
     margin-bottom: 20px;
 }
 
-/* Footer */
+/* FOOTER */
 
 .page-footer {
     text-align: center;
@@ -707,7 +711,7 @@ a {
     font-size: 11px;
 }
 
-/* Responsive Design */
+/* RESPONSIVE DASHBOARD */
 
 @media (min-width: 1500px) {
     .main-content {
@@ -879,5 +883,219 @@ a {
 
     .profile {
         align-self: flex-start;
+    }
+}
+
+
+/* =========================================
+   PHASE 1 - PDF PREVIEW
+========================================= */
+
+/* Preview Button */
+
+.preview-button {
+    flex: 1;
+    min-width: 0;
+    background: #f5f1ff;
+    color: #684bc2;
+    border: 1px solid #e5dcff;
+    border-radius: 8px;
+    padding: 10px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.preview-button:hover {
+    background: #e8deff;
+    border-color: #c8b6ff;
+}
+
+.note-actions .download-button {
+    min-width: 0;
+}
+
+.note-actions .delete-button {
+    flex-shrink: 0;
+}
+
+/* Prevent background scrolling */
+
+body.modal-open {
+    overflow: hidden;
+}
+
+/* PDF Popup Background */
+
+#pdfModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+    background: rgba(25, 19, 46, 0.68);
+    padding: 25px;
+    align-items: center;
+    justify-content: center;
+}
+
+#pdfModal.show {
+    display: flex;
+}
+
+/* Main PDF Popup */
+
+.pdf-modal-content {
+    width: 100%;
+    max-width: 1050px;
+    height: 90vh;
+    max-height: 900px;
+    background: #ffffff;
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+}
+
+/* PDF Popup Header */
+
+.pdf-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 17px 24px;
+    border-bottom: 1px solid #ece9f4;
+}
+
+.pdf-modal-heading {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-width: 0;
+}
+
+.pdf-modal-heading > span {
+    width: 43px;
+    height: 43px;
+    background: #eee8ff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.pdf-modal-heading > div {
+    min-width: 0;
+}
+
+.pdf-modal-heading .eyebrow {
+    margin-bottom: 3px;
+}
+
+.pdf-modal-heading h2 {
+    font-size: 17px;
+    color: #27243a;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Close Button */
+
+.pdf-close-button {
+    width: 37px;
+    height: 37px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 10px;
+    background: #f5f2fc;
+    color: #684bc2;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.pdf-close-button:hover {
+    background: #e7dcff;
+}
+
+/* PDF Viewer */
+
+.pdf-viewer-area {
+    flex: 1;
+    min-height: 0;
+    background: #f5f4f9;
+}
+
+.pdf-viewer-area iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+/* PDF Popup Footer */
+
+.pdf-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 14px 24px;
+    border-top: 1px solid #ece9f4;
+}
+
+.pdf-modal-footer p {
+    color: #89869b;
+    font-size: 11px;
+}
+
+/* Responsive PDF Preview */
+
+@media (max-width: 760px) {
+    #pdfModal {
+        padding: 10px;
+    }
+
+    .pdf-modal-content {
+        height: 94vh;
+        border-radius: 13px;
+    }
+
+    .pdf-modal-header {
+        padding: 13px;
+    }
+
+    .pdf-modal-heading h2 {
+        font-size: 13px;
+    }
+
+    .pdf-modal-footer {
+        padding: 12px;
+    }
+
+    .pdf-modal-footer p {
+        display: none;
+    }
+
+    .pdf-modal-footer .primary-button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 430px) {
+    .note-actions {
+        flex-wrap: wrap;
+    }
+
+    .preview-button,
+    .note-actions .download-button {
+        flex: 1;
     }
 }

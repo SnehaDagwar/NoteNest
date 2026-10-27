@@ -1,16 +1,18 @@
 
-from flask import Flask, render_template, request, redirect, send_from_directory
+from flask import Flask, render_template, request, redirect, send_from_directory, abort
 import sqlite3
 import os
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
-# Folder for uploaded files
-os.makedirs("uploads", exist_ok=True)
+UPLOAD_FOLDER = os.path.join(app.root_path, "uploads")
+DATABASE = os.path.join(app.root_path, "notes.db")
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Create database and table
-db = sqlite3.connect("notes.db")
+db = sqlite3.connect(DATABASE)
 
 db.execute("""
 CREATE TABLE IF NOT EXISTS notes (
@@ -26,12 +28,14 @@ db.commit()
 db.close()
 
 
-# Home page and upload notes
+# Home page, upload notes and search
 @app.route("/", methods=["GET", "POST"])
 def home():
-    db = sqlite3.connect("notes.db")
+
+    db = sqlite3.connect(DATABASE)
 
     if request.method == "POST":
+
         title = request.form["title"].strip()
         year = request.form["year"]
         subject = request.form["subject"].strip()
@@ -47,11 +51,10 @@ def home():
             db.close()
             return "Invalid filename.", 400
 
-        # Save the uploaded file with a unique name
         stored_name = os.urandom(8).hex() + "_" + filename
-        file.save(os.path.join("uploads", stored_name))
 
-        # Save note details in the database
+        file.save(os.path.join(UPLOAD_FOLDER, stored_name))
+
         db.execute("""
             INSERT INTO notes (title, year, subject, filename)
             VALUES (?, ?, ?, ?)
@@ -60,22 +63,28 @@ def home():
         db.commit()
         db.close()
 
-        return redirect("/")
+        return redirect("/#notes-section")
 
-    # Search notes
-    search = request.args.get("search", "")
+    search = request.args.get("search", "").strip()
 
-    notes = db.execute("""
-        SELECT * FROM notes
-        WHERE title LIKE ?
-           OR subject LIKE ?
-           OR year LIKE ?
-        ORDER BY id DESC
-    """, (
-        "%" + search + "%",
-        "%" + search + "%",
-        "%" + search + "%"
-    )).fetchall()
+    if search:
+
+        keyword = f"%{search.lower()}%"
+
+        notes = db.execute("""
+            SELECT * FROM notes
+            WHERE LOWER(TRIM(title)) LIKE ?
+               OR LOWER(TRIM(subject)) LIKE ?
+               OR LOWER(TRIM(year)) LIKE ?
+            ORDER BY id DESC
+        """, (keyword, keyword, keyword)).fetchall()
+
+    else:
+
+        notes = db.execute("""
+            SELECT * FROM notes
+            ORDER BY id DESC
+        """).fetchall()
 
     db.close()
 
@@ -89,32 +98,71 @@ def home():
 # Download a note
 @app.route("/uploads/<filename>")
 def download_file(filename):
+
     return send_from_directory(
-        "uploads", filename, as_attachment=True
+        UPLOAD_FOLDER,
+        filename,
+        as_attachment=True
+    )
+
+
+# Preview PDF inside the browser
+@app.route("/preview/<int:id>")
+def preview_file(id):
+
+    db = sqlite3.connect(DATABASE)
+
+    note = db.execute(
+        "SELECT filename FROM notes WHERE id = ?",
+        (id,)
+    ).fetchone()
+
+    db.close()
+
+    if not note:
+        abort(404)
+
+    filename = note[0]
+
+    if not filename.lower().endswith(".pdf"):
+        abort(404)
+
+    return send_from_directory(
+        UPLOAD_FOLDER,
+        filename,
+        mimetype="application/pdf",
+        as_attachment=False
     )
 
 
 # Delete a note
 @app.route("/delete/<int:id>", methods=["POST"])
 def delete(id):
-    db = sqlite3.connect("notes.db")
+
+    db = sqlite3.connect(DATABASE)
 
     note = db.execute(
-        "SELECT filename FROM notes WHERE id = ?", (id,)
+        "SELECT filename FROM notes WHERE id = ?",
+        (id,)
     ).fetchone()
 
     if note:
-        path = os.path.join("uploads", note[0])
+
+        path = os.path.join(UPLOAD_FOLDER, note[0])
 
         if os.path.isfile(path):
             os.remove(path)
 
-        db.execute("DELETE FROM notes WHERE id = ?", (id,))
+        db.execute(
+            "DELETE FROM notes WHERE id = ?",
+            (id,)
+        )
+
         db.commit()
 
     db.close()
 
-    return redirect("/")
+    return redirect("/#notes-section")
 
 
 # Run the website
